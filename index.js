@@ -1,12 +1,15 @@
 const express=require('express')
-const cookieParser = require("cookie-parser");
 const app=express()
-app.use(express.json())
-
+const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
 require('dotenv').config()
+
+const port=process.env.PORT ||8000
+app.use(express.json())
+
+
 const connectdb = require("./config/db");
 const authuser = require("./routes/authroutes");
 const taskRoutes=require("./routes/taskroutes")
@@ -24,7 +27,9 @@ connectdb()
 var cors = require("cors");
 app.use(
   cors({
-    origin: ["http://localhost:5173","https://remotework-tracker-frontend.onrender.com"],
+    origin: "http://localhost:5173",
+      
+    
     credentials: true,
   })
 );
@@ -48,6 +53,6 @@ app.use("/api/disputes",disputeroutes)
 app.use("/api/plans", planRoutes);
 
 app.listen(process.env.PORT,()=>{
-    console.log(`Listening to port number http://localhost:${process.env.PORT}`);
+    console.log(`Listening to port number http://localhost:${port}`);
 
 })
