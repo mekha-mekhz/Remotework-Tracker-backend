@@ -1,9 +1,9 @@
-import Notification from "../models/notificationmodel.js";
+const Notificaton=require("../models/notificationmodel")
 
 /* ================================
    GET NOTIFICATIONS FOR LOGGED USER
 ================================ */
-export const getNotifications = async (req, res) => {
+exports.getNotifications = async (req, res) => {
   try {
     const { id: userId, role: userRole } = req.user;
 
@@ -20,7 +20,7 @@ export const getNotifications = async (req, res) => {
 /* ================================
       MARK SINGLE AS READ
 ================================ */
-export const markNotificationRead = async (req, res) => {
+exports. markNotificationRead = async (req, res) => {
   try {
     const updated = await Notification.findByIdAndUpdate(
       req.params.id,
@@ -44,7 +44,7 @@ export const markNotificationRead = async (req, res) => {
 /* ================================
         MARK ALL AS READ
 ================================ */
-export const markAllRead = async (req, res) => {
+exports.markAllRead = async (req, res) => {
   try {
     const { id: userId, role: userRole } = req.user;
 
@@ -64,7 +64,7 @@ export const markAllRead = async (req, res) => {
 /* ================================
         DELETE NOTIFICATION
 ================================ */
-export const deleteNotification = async (req, res) => {
+exports.deleteNotification = async (req, res) => {
   try {
     const deleted = await Notification.findByIdAndDelete(req.params.id);
 
@@ -81,7 +81,7 @@ export const deleteNotification = async (req, res) => {
 /* ================================
       ADMIN – GET ALL NOTICES
 ================================ */
-export const adminGetAllNotifications = async (req, res) => {
+exports.adminGetAllNotifications = async (req, res) => {
   try {
     const data = await Notification.find().sort({ createdAt: -1 });
     res.json({ notifications: data });
@@ -93,7 +93,7 @@ export const adminGetAllNotifications = async (req, res) => {
 /* ================================
          HELPER: CREATE
 ================================ */
-export const createNotification = async ({
+exports.createNotification = async ({
   title,
   message,
   type = "info",

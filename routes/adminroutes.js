@@ -1,15 +1,13 @@
-import express from "express";
-import { authuser } from "../middleware/auth.js";
-import { onlyAdmin } from "../middleware/roleMiddleware.js";
-
-import User from "../models/usermodel.js";
-import Leave from "../models/leavemodel.js";
-import Task from "../models/taskmodel.js";
-
+const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const role = require("../middleware/roleMiddleware");
+const User = require("../models/usermodel");
+const Leave = require("../models/leavemodel");
+const Task = require("../models/taskmodel");
 
 // 📌 Get all users
-router.get("/users", authuser, onlyAdmin, async (req, res) => {
+router.get("/users", auth.authuser, role.onlyAdmin, async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.status(200).json({ users });
@@ -19,7 +17,7 @@ router.get("/users", authuser, onlyAdmin, async (req, res) => {
 });
 
 // 📌 Get all leave requests
-router.get("/leaves", authuser, onlyAdmin, async (req, res) => {
+router.get("/leaves", auth.authuser, role.onlyAdmin, async (req, res) => {
   try {
     const leaves = await Leave.find().populate("user", "name email role");
     res.status(200).json({ leaves });
@@ -29,7 +27,7 @@ router.get("/leaves", authuser, onlyAdmin, async (req, res) => {
 });
 
 // 📌 Approve / Reject Leave
-router.patch("/leave/:id/status", authuser, onlyAdmin, async (req, res) => {
+router.patch("/leave/:id/status", auth.authuser, role.onlyAdmin, async (req, res) => {
   try {
     const { status } = req.body;
 
@@ -46,7 +44,7 @@ router.patch("/leave/:id/status", authuser, onlyAdmin, async (req, res) => {
 });
 
 // 📌 Get all tasks
-router.get("/tasks", authuser, onlyAdmin, async (req, res) => {
+router.get("/tasks", auth.authuser, role.onlyAdmin, async (req, res) => {
   try {
     const tasks = await Task.find().populate("assignedTo", "name email");
     res.status(200).json({ tasks });
@@ -55,4 +53,4 @@ router.get("/tasks", authuser, onlyAdmin, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
