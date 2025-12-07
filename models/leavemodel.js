@@ -25,5 +25,4 @@ const leaveSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-const leave= mongoose.model("Leave", leaveSchema);
-export default leave
+module.exports = mongoose.model("Leave", leaveSchema);

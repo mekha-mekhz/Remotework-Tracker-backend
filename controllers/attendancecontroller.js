@@ -1,7 +1,7 @@
-const Attendance = require("../models/attendancemodel");
+import Attendace from "../models/attendancemodel";
 
 // ----------------- CHECK-IN -----------------
-exports.checkInUser = async (req, res) => {
+export const checkInUser = async (req, res) => {
   try {
     const userId = req.user.id;
     const today = new Date().toISOString().split("T")[0];
@@ -27,7 +27,7 @@ exports.checkInUser = async (req, res) => {
 };
 
 // ----------------- CHECK-OUT -----------------
-exports.checkOutUser = async (req, res) => {
+export const checkOutUser = async (req, res) => {
   try {
     const userId = req.user.id;
     const today = new Date().toISOString().split("T")[0];
@@ -55,7 +55,7 @@ exports.checkOutUser = async (req, res) => {
 };
 
 // ----------------- GET MY ATTENDANCE -----------------
-exports.getMyAttendance = async (req, res) => {
+export const getMyAttendance = async (req, res) => {
   try {
     const entries = await Attendance.find({ user: req.user.id }).sort({ date: -1 });
     res.status(200).json({ entries });
@@ -65,7 +65,7 @@ exports.getMyAttendance = async (req, res) => {
 };
 
 // ----------------- ADMIN -----------------
-exports.getAllAttendance = async (req, res) => {
+export const getAllAttendance = async (req, res) => {
   try {
     if (!["admin", "manager"].includes(req.user.role)) {
       return res.status(403).json({ message: "Access denied" });
