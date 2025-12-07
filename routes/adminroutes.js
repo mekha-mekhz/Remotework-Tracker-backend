@@ -1,10 +1,10 @@
-const express = require("express");
-const { authuser } = require("../middleware/auth");
-const { onlyAdmin } = require("../middleware/roleMiddleware");
+import express from "express";
+import { authuser } from "../middleware/auth.js";
+import { onlyAdmin } from "../middleware/roleMiddleware.js";
 
-const User = require("../models/usermodel");
-const Leave = require("../models/leavemodel");
-const Task = require("../models/taskmodel");
+import User from "../models/usermodel.js";
+import Leave from "../models/leavemodel.js";
+import Task from "../models/taskmodel.js";
 
 const router = express.Router();
 
@@ -55,4 +55,4 @@ router.get("/tasks", authuser, onlyAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
