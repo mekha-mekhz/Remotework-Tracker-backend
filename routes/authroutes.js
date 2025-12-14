@@ -57,4 +57,10 @@ router.put("/approve/:userId", authcontroller.approveUser);
 
 // Reject user
 router.delete("/reject/:userId", authcontroller.rejectUser);
+
+router.get("/user/all",authcontroller.getUsers)
+router.get("/managers", auth.authuser,authcontroller.managers)
+router.post("/forgot-password", authcontroller.forgotpassword);
+router.post("/reset-password", authcontroller.resetpassword);
+
 module.exports = router;

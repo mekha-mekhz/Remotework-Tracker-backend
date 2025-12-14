@@ -16,5 +16,8 @@ router.get(
   auth.authorizeRoles("admin"),
   notificationcontroller.adminGetAllNotifications
 );
-
+router.post(
+  "/create",
+  auth.authuser,
+  auth.authorizeRoles("admin", "manager"),notificationcontroller.createnoti)
 module.exports= router;

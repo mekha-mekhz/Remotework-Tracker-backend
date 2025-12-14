@@ -1,4 +1,7 @@
-const Notificaton=require("../models/notificationmodel")
+
+const Notification = require("../models/notificationmodel");
+
+
 
 /* ================================
    GET NOTIFICATIONS FOR LOGGED USER
@@ -112,3 +115,14 @@ exports.createNotification = async ({
     console.log("Notification creation failed:", err.message);
   }
 };
+// Create notification (used by manager to notify assigned users)
+exports.createnoti=async (req, res) => {
+    const { title, message, type, userId, role } = req.body;
+    try {
+      await Notification.create({ title, message, type, userId, role });
+      res.status(201).json({ message: "Notification sent" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to create notification" });
+    }
+  }
+

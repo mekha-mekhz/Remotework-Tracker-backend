@@ -2,6 +2,9 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/usermodel");
+const nodemailer = require("nodemailer")
+const crypto = require("crypto");
+
 
 
 
@@ -291,5 +294,92 @@ exports.rejectUser = async (req, res) => {
     res.status(200).json({ message: "User request rejected and deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+
+// Get all normal users (role = user)
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.find({ role: "user" }).select("-password");
+
+    res.status(200).json({ users });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+exports.managers= async (req, res) => {
+  try {
+    const managers = await User.find({ role: "manager" }).select("name email").lean();
+    res.status(200).json({ success: true, managers });
+  } catch (err) {
+    console.error("Manager fetch error:", err);
+    res.status(500).json({ message: "Failed to fetch managers" });
+  }
+};
+
+exports.forgotpassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(404).json({ message: "User not found" });
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.resetOTP = otp;
+    user.resetOTPExpiry = Date.now() + 10 * 60 * 1000; // 10 mins
+    await user.save();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: "RemoteWork Tracker",
+      to: user.email,
+      subject: "Password Reset OTP",
+      html: `
+        <p>Hello ${user.name},</p>
+        <h2>Your OTP: <b>${otp}</b></h2>
+        <p>This OTP is valid for 10 minutes.</p>
+      `,
+    });
+
+    res.json({ message: "OTP sent to your email" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+exports.resetpassword = async (req, res) => {
+  const { email, otp, password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      email,
+      resetOTP: otp,
+      resetOTPExpiry: { $gt: Date.now() },
+    });
+
+    if (!user)
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    user.password = hashed;
+    user.resetOTP = undefined;
+    user.resetOTPExpiry = undefined;
+    await user.save();
+
+    res.json({ message: "Password reset successful" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };

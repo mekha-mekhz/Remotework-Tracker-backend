@@ -66,7 +66,14 @@ const userSchema = new mongoose.Schema({
 isApproved: {
   type: Boolean,
   default: false
-}
+},
+resetOTP: {
+  type: String,
+},
+resetOTPExpiry: {
+  type: Date,
+},
+
 
 });
 
