@@ -33,7 +33,7 @@ exports.createCheckoutSession = async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/success`,
+      success_url: `${process.env.CLIENT_URL}/paymentsuccess`,
       cancel_url: `${process.env.CLIENT_URL}/pricing`,
     });
 
