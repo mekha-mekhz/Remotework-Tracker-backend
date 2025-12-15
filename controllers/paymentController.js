@@ -1,7 +1,6 @@
-const { config } = require("dotenv");
 const stripe = require("../config/stripe");
 const Plan = require("../models/plan");
-require("dotenv").config()
+
 exports.createCheckoutSession = async (req, res) => {
   try {
     const { planId } = req.body;
@@ -22,7 +21,6 @@ exports.createCheckoutSession = async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-
       line_items: [
         {
           price_data: {
@@ -35,16 +33,17 @@ exports.createCheckoutSession = async (req, res) => {
           quantity: 1,
         },
       ],
-
       success_url: `${process.env.CLIENT_URL}/success`,
       cancel_url: `${process.env.CLIENT_URL}/pricing`,
     });
 
-    // ✅ Stripe 2025 best practice
-    res.json({ url: session.url });
+    return res.json({ url: session.url });
 
   } catch (err) {
     console.error("Stripe Error:", err);
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({
+      error: "Failed to create checkout session",
+      details: err.message,
+    });
   }
 };
