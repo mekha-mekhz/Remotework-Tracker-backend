@@ -38,8 +38,9 @@ exports.createCheckoutSession = async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL}/pricing`,
     });
 
-    // ✅ IMPORTANT FIX
-    return res.json({ id: session.id });
+    
+return res.json({ url: session.url });
+
 
   } catch (err) {
     console.error("Stripe Error:", err);
