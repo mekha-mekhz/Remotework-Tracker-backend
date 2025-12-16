@@ -21,6 +21,7 @@ exports.createCheckoutSession = async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
@@ -28,7 +29,7 @@ exports.createCheckoutSession = async (req, res) => {
             product_data: {
               name: plan.name,
             },
-            unit_amount: amount * 100,
+            unit_amount: amount * 100, // ₹ → paise
           },
           quantity: 1,
         },
@@ -37,7 +38,8 @@ exports.createCheckoutSession = async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL}/pricing`,
     });
 
-    return res.json({ url: session.url });
+    // ✅ IMPORTANT FIX
+    return res.json({ id: session.id });
 
   } catch (err) {
     console.error("Stripe Error:", err);
