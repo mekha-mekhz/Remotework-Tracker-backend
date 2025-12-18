@@ -39,8 +39,11 @@ exports.createCheckoutSession = async (req, res) => {
 
       ui_mode: "hosted",
 
-      success_url: "http://localhost:5173/paymentsuccess",
-      cancel_url: "http://localhost:5173/cancel",
+      // success_url: "http://localhost:5173/paymentsuccess",
+      // cancel_url: "http://localhost:5173/cancel",
+    sucess_url: "https://remotework-tracker-frontend.onrender.com/paymentsuccess",
+    cancel_url:"https://remotework-tracker-frontend.onrender.com/cancel"
+
     });
 
     // 5️⃣ Return URL instead of sessionId (Stripe 2025 requirement)
