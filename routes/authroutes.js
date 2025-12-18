@@ -62,5 +62,7 @@ router.get("/user/all",authcontroller.getUsers)
 router.get("/managers", auth.authuser,authcontroller.managers)
 router.post("/forgot-password", authcontroller.forgotpassword);
 router.post("/reset-password", authcontroller.resetpassword);
-
+router.get("/status", auth.authuser,authcontroller.getstatus)
+  router.put("/status", auth.authuser,authcontroller.updatestatus)
+  router.get("/all-status", auth.authuser,authcontroller.allstatus)
 module.exports = router;

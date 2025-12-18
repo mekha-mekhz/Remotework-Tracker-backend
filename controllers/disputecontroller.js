@@ -142,3 +142,21 @@ exports.getDisputeStats = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+exports.getMyDisputes = async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const disputes = await Dispute.find({
+      reportedBy: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(disputes);
+  } catch (error) {
+    console.error("Get My Disputes Error:", error);
+    res.status(500).json({
+      message: "Failed to load disputes",
+    });
+  }
+};

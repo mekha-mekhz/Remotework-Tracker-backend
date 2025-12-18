@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
+require("./utils/reminderJob");
 
 app.use(express.urlencoded({ extended: true }));
 require("dotenv").config();
@@ -24,6 +25,7 @@ const premiumRoutes = require("./routes/premiumroutes");
 const disputeroutes = require("./routes/disputeroutes");
 const productroutes = require("./routes/productivityroutes");
 const chatroutes = require("./routes/messageroutes");
+const reminderRoutes=require("./routes/reminderRoutes")
 connectdb();
 var cors = require("cors");
 app.use(
@@ -46,15 +48,16 @@ app.use("/api/time", timeroutes);
 app.use("/api/attendance", attendanceroutes);
 app.use("/api/leave", leaveroutes);
 app.use("/api/productivity", productivityroutes);
-app.use("/admin", adminRoutes);
+
 app.use("/api/notifications", notificationroutes);
 app.use("/api/pay", paymentRoutes);
 app.use("/api/premium", premiumRoutes);
 app.use("/api/disputes", disputeroutes);
 app.use("/api/productivitys", productroutes);
-
+app.use("/api/admin",adminRoutes)
 app.use("/api/plans", planRoutes);
 app.use("/api/messages", chatroutes);
+app.use("/api/reminders", reminderRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening to port number http://localhost:${port}`);

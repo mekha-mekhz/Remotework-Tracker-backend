@@ -3,10 +3,13 @@ const router = express.Router();
 const disputeController = require("../controllers/disputecontroller");
 const auth = require("../middleware/auth");
 
-// ====================== CREATE DISPUTE ======================
+// ====================== CREATE ======================
 router.post("/create", auth.authuser, disputeController.createDispute);
 
-// ====================== DISPUTE STATS (PLACE ABOVE :id !!!) ======================
+// ====================== USER ROUTES ======================
+router.get("/my", auth.authuser, disputeController.getMyDisputes);
+
+// ====================== STATS (ADMIN) ======================
 router.get(
   "/stats/all",
   auth.authuser,
@@ -14,16 +17,16 @@ router.get(
   disputeController.getDisputeStats
 );
 
-// ====================== GET ALL DISPUTES ======================
+// ====================== LIST ======================
 router.get("/", auth.authuser, disputeController.getAllDisputes);
 
-// ====================== GET SINGLE DISPUTE ======================
+// ====================== SINGLE ======================
 router.get("/:id", auth.authuser, disputeController.getDisputeById);
 
-// ====================== UPDATE DISPUTE ======================
+// ====================== UPDATE ======================
 router.put("/:id", auth.authuser, disputeController.updateDispute);
 
-// ====================== DELETE DISPUTE ======================
+// ====================== DELETE ======================
 router.delete(
   "/:id",
   auth.authuser,

@@ -73,7 +73,11 @@ resetOTP: {
 resetOTPExpiry: {
   type: Date,
 },
-
+status: {
+    type: String,
+    enum: ["available", "busy", "invisible", "dnd"],
+    default: "available",
+  },
 
 });
 

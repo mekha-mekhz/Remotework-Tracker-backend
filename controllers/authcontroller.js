@@ -383,3 +383,49 @@ exports.resetpassword = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+// UPDATE STATUS
+ exports.updatestatus=async (req, res) => {
+  const { status } = req.body;
+
+  if (!["available","busy","invisible","dnd"].includes(status)) {
+    return res.status(400).json({ message: "Invalid status" });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { status },
+      { new: true }
+    );
+
+    res.json({ status: user.status });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// GET STATUS (optional)
+ exports.getstatus=async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.json({ status: user.status });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+// GET ALL USERS (for Admin / Manager)
+exports.allstatus= async (req, res) => {
+  try {
+    const requester = await User.findById(req.user.id);
+
+    if (!["admin", "manager"].includes(requester.role)) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    // Return id, name, email, status, role
+    const users = await User.find({}, "name email status role");
+    res.json({ users });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
