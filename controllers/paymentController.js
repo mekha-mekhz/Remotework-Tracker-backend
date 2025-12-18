@@ -53,16 +53,23 @@
 // };
 
 // controllers/paymentController.js
-import dotenv from "dotenv";
-import Stripe from "stripe";
-import Plan from "../models/Plan.js";
 
+// dotenv
+const dotenv = require("dotenv");
 dotenv.config();
 
-// ✅ Stripe secret key (SERVER ONLY)
+// Stripe
+const Stripe = require("stripe");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export const createCheckoutSession = async (req, res) => {
+// Plan model
+const Plan = require("../models/plan");
+
+
+
+
+
+exports. createCheckoutSession = async (req, res) => {
   try {
     const { planId, userId, email } = req.body;
 
@@ -85,7 +92,7 @@ export const createCheckoutSession = async (req, res) => {
     // ✅ Create Stripe Checkout Session (NO subscription, NO webhook)
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-       locale: "en",
+
       payment_method_types: ["card"],
 
       customer_email: email, // optional but recommended
@@ -104,8 +111,10 @@ export const createCheckoutSession = async (req, res) => {
         },
       ],
 
-      success_url: `http://localhost:5173/paymentsuccess?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `http://localhost:5173/pricing`,
+      // success_url: `http://localhost:5173/paymentsuccess?session_id={CHECKOUT_SESSION_ID}`,
+      // cancel_url: `http://localhost:5173/pricing`,
+      success_url: `https://remotework-tracker-frontend.onrender.com/paymentsuccess?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://remotework-tracker-frontend.onrender.com/pricing`,
 
       metadata: {
         planId: plan._id.toString(),
@@ -120,4 +129,3 @@ export const createCheckoutSession = async (req, res) => {
     return res.status(500).json({ error: "Payment initiation failed" });
   }
 };
-
