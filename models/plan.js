@@ -1,11 +1,24 @@
-// models/Plan.js
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const planSchema = new mongoose.Schema({
-  name: String,
-  price: Number,
-  duration: String,
-  features: [String],
-});
+const planSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    features: {
+      type: [String],
+      default: [],
+    },
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model("Plan", planSchema);
+
+const Plan = mongoose.models.Plan || mongoose.model("Plan", planSchema);
+
+export default Plan;
