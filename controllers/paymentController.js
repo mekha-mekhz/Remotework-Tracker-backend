@@ -37,7 +37,7 @@ exports.createCheckoutSession = async (req, res) => {
         },
       ],
 
-      ui_mode: "hosted",
+      // ui_mode: "hosted",
 
       // success_url: "http://localhost:5173/paymentsuccess",
       // cancel_url: "http://localhost:5173/cancel",
