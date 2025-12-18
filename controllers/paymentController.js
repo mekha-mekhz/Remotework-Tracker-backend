@@ -41,7 +41,7 @@ exports.createCheckoutSession = async (req, res) => {
 
       // success_url: "http://localhost:5173/paymentsuccess",
       // cancel_url: "http://localhost:5173/cancel",
-    sucess_url: "https://remotework-tracker-frontend.onrender.com/paymentsuccess",
+    success_url: "https://remotework-tracker-frontend.onrender.com/paymentsuccess",
     cancel_url:"https://remotework-tracker-frontend.onrender.com/cancel"
 
     });
